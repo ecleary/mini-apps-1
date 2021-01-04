@@ -1,4 +1,4 @@
-//// Init //// Onload view initialization ////////
+//// Init //// View initialization on first load ////////
 
 // document.body.onload = () => {
 //   body.append(app);
@@ -10,8 +10,6 @@ const title = document.createElement('h1');
 const helloWorld = document.createTextNode('Hello, Tic-Tac-Toe World');
 const gameboard = document.createElement('table');
 
-// title.style.cssText = 'color: blue';
-
 title.appendChild(helloWorld);
 app.appendChild(title);
 app.appendChild(gameboard);
@@ -22,8 +20,9 @@ for (let i = 0; i < 3; i++) {
   row.className = `row-${i}`;
   for (let j = 0; j < 3; j++) {
     let space = document.createElement('td');
-    space.className = `col-${j}`;
-    let spaceFiller = document.createElement('h2');
+    space.className = `row-${i} col-${j}`;
+    space.style.cssText = 'width: 70px; height: 70px; text-align: center;';
+    let spaceFiller = document.createElement('h1');
     spaceFiller.id = `r${i}-c${j}`;
     spaceFiller.appendChild(document.createTextNode('X'));
     space.appendChild(spaceFiller);
@@ -32,13 +31,19 @@ for (let i = 0; i < 3; i++) {
   gameboard.appendChild(row);
 }
 
-const testElems1 = body.getElementsByClassName('col-1');
-// const testElems1 = document.getElementsByClassName('col-1');
+const middleColumn = document.getElementsByClassName('col-1');
+const middleRow = document.getElementsByClassName('row-1');
 
-for (let i = 0; i < testElems1.length; i++) {
-  testElems1[i].style['border-left'] = 'solid black 1px';
-  // testElems1[i].setAttribute('style', 'border-left: solid black 1px');
-  // testElems1[i].style.cssText = 'border-left: solid black 1px';
+for (let i = 0; i < middleColumn.length; i++) {
+  let currentStyle = middleColumn[i].getAttribute('style');
+  currentStyle = currentStyle ? ' ' + currentStyle : '';
+  middleColumn[i].style.cssText = 'border-left: 3px solid black; border-right: 3px solid black;' + currentStyle;
+}
+
+for (let i = 0; i < middleRow.length; i++) {
+  let currentStyle = middleRow[i].getAttribute('style');
+  currentStyle = currentStyle ? ' ' + currentStyle : '';
+  middleRow[i].style.cssText = 'border-top: 3px solid black; border-bottom: 3px solid black;' + currentStyle;
 }
 
 
