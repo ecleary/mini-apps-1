@@ -15,6 +15,8 @@ body.append(app);
 
 // Game board
 
+gameboard.setAttribute('cellspacing', '0');
+
 for (let i = 0; i < 3; i++) {
   let row = document.createElement('tr');
   for (let j = 0; j < 3; j++) {
@@ -22,10 +24,10 @@ for (let i = 0; i < 3; i++) {
     space.className = `space row-${i} col-${j}`;
     // space.setAttribute('alt', `r${i}-c${j}`);
     space.style.cssText = 'width: 80px; height: 80px; text-align: center; cursor: pointer;';
-    let spaceFiller = document.createElement('h1');
-    spaceFiller.id = `r${i}-c${j}`;
-    // spaceFiller.append(document.createTextNode('X'));
-    space.append(spaceFiller);
+    let position = document.createElement('h1');
+    position.id = `r${i}-c${j}`;
+    // position.append(document.createTextNode('X'));
+    space.append(position);
     row.append(space);
   }
   gameboard.append(row);
@@ -39,13 +41,13 @@ const middleRow = document.getElementsByClassName('row-1');
 for (let i = 0; i < middleColumn.length; i++) {
   let currentStyle = middleColumn[i].getAttribute('style');
   currentStyle = currentStyle ? ' ' + currentStyle : '';
-  middleColumn[i].style.cssText = 'border-left: 3px solid black; border-right: 3px solid black;' + currentStyle;
+  middleColumn[i].style.cssText = 'border-left: 5px solid black; border-right: 5px solid black;' + currentStyle;
 }
 
 for (let i = 0; i < middleRow.length; i++) {
   let currentStyle = middleRow[i].getAttribute('style');
   currentStyle = currentStyle ? ' ' + currentStyle : '';
-  middleRow[i].style.cssText = 'border-top: 3px solid black; border-bottom: 3px solid black;' + currentStyle;
+  middleRow[i].style.cssText = 'border-top: 5px solid black; border-bottom: 5px solid black;' + currentStyle;
 }
 
 // Reset button
@@ -71,6 +73,10 @@ const getNextPiece = () => {
   return currentPiece;
 };
 
+// Serve game progress
+
+
+
 //// Controllers //// Request and response handling ////////
 
 // Place piece
@@ -82,6 +88,14 @@ const placePiece = (event) => {
     appendPieceToSpace(id, piece);
   }
 };
+
+// Check for winner
+
+
+
+// Declare winner
+
+
 
 //// Views //// DOM manipulation and event listeners ////////
 
@@ -97,3 +111,18 @@ const appendPieceToSpace = (id, piece) => {
   const targetElement = document.getElementById(id);
   targetElement.append(piece);
 };
+
+// Reset board
+
+const clearBoard = () => {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      const position = document.getElementById(`r${i}-c${j}`);
+      if (position.lastChild) {
+        position.removeChild(position.lastChild);
+      }
+    }
+  }
+};
+
+resetButton.onclick = clearBoard;
