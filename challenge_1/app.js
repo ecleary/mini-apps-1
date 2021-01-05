@@ -61,18 +61,31 @@ app.append(resetButtonContainer);
 
 //// Models //// Data storage ////////
 
+// Serve piece
 
+let nextPiece = 'X';
+
+const getNextPiece = () => {
+  const currentPiece = nextPiece;
+  nextPiece = nextPiece === 'X' ? 'O' : 'X';
+  return currentPiece;
+};
 
 //// Controllers //// Request and response handling ////////
+
+// Place piece
 
 const placePiece = (event) => {
   const {id, childNodes} = event.target.childNodes[0];
   if (id && childNodes.length === 0) {
-    appendPieceToSpace(id, 'X');
+    const piece = getNextPiece();
+    appendPieceToSpace(id, piece);
   }
 };
 
 //// Views //// DOM manipulation and event listeners ////////
+
+// Listen for click and append piece
 
 const spaces = document.getElementsByClassName('space');
 
