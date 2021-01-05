@@ -5,7 +5,7 @@
 const body = document.body;
 const app = document.createElement('div');
 const title = document.createElement('h1');
-const helloWorld = document.createTextNode('Hello, Tic-Tac-Toe World');
+const helloWorld = document.createTextNode(`Let’s Play Tic-Tac-Toe`);
 const gameboard = document.createElement('table');
 
 title.append(helloWorld);
@@ -20,11 +20,9 @@ for (let i = 0; i < 3; i++) {
   for (let j = 0; j < 3; j++) {
     let space = document.createElement('td');
     space.className = `space row-${i} col-${j}`;
-    // space.setAttribute('alt', `r${i}-c${j}`);
     space.style.cssText = 'width: 80px; height: 80px; text-align: center; cursor: pointer;';
     let position = document.createElement('h1');
     position.id = `r${i}-c${j}`;
-    // position.append(document.createTextNode('X'));
     space.append(position);
     row.append(space);
   }
