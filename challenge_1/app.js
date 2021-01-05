@@ -192,11 +192,11 @@ const placePiece = (event) => {
     if (id && childNodes.length === 0) {
       const {currentPiece, nextPiece} = getNextPiece();
       appendPieceToSpace(id, currentPiece);
-      let movesPlayed = countMove();
-      if (movesPlayed === 9) {
-        endGame();
-        announceDraw();
-      }
+      // let movesPlayed = countMove();
+      // if (movesPlayed === 9) {
+      //   endGame();
+      //   announceDraw();
+      // }
     }
   }
 };
@@ -214,19 +214,24 @@ const resetGameStatus = () => {
 
 // Check for winner
 
-const checkForWin = (callback) => {
+const checkForWin = () => {
   const checks = [checkForRowWin, checkForColWin, checkForMajDiagWin, checkForMinDiagWin];
-  let runCallback = true;
+  let proceedToNextMove = true;
   for (let i = 0; i < checks.length; i++) {
     let check = checks[i]();
     if (check) {
       declareWinner(check);
-      runCallback = false;
+      proceedToNextMove = false;
       break;
     }
   }
-  if (runCallback) {
-    callback();
+  if (proceedToNextMove) {
+    updateNextMove(nextPiece);
+    let movesPlayed = countMove();
+    if (movesPlayed === 9) {
+      endGame();
+      announceDraw();
+    }
   }
 };
 
@@ -249,9 +254,7 @@ for (let i = 0; i < spaces.length; i++) {
 const appendPieceToSpace = (id, piece) => {
   const targetElement = document.getElementById(id);
   targetElement.append(piece);
-  checkForWin(() => {
-    updateNextMove(nextPiece);
-  });
+  checkForWin();
 };
 
 // Update next move
