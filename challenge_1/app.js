@@ -1,8 +1,6 @@
 //// Init //// View initialization on first load ////////
 
-// document.body.onload = () => {
-//   body.append(app);
-// }
+// Document
 
 const body = document.body;
 const app = document.createElement('div');
@@ -10,26 +8,30 @@ const title = document.createElement('h1');
 const helloWorld = document.createTextNode('Hello, Tic-Tac-Toe World');
 const gameboard = document.createElement('table');
 
-title.appendChild(helloWorld);
-app.appendChild(title);
-app.appendChild(gameboard);
+title.append(helloWorld);
+app.append(title);
+app.append(gameboard);
 body.append(app);
+
+// Game board
 
 for (let i = 0; i < 3; i++) {
   let row = document.createElement('tr');
-  row.className = `row-${i}`;
   for (let j = 0; j < 3; j++) {
     let space = document.createElement('td');
-    space.className = `row-${i} col-${j}`;
+    space.className = `space row-${i} col-${j}`;
+    // space.setAttribute('alt', `r${i}-c${j}`);
     space.style.cssText = 'width: 70px; height: 70px; text-align: center;';
     let spaceFiller = document.createElement('h1');
     spaceFiller.id = `r${i}-c${j}`;
-    spaceFiller.appendChild(document.createTextNode('X'));
-    space.appendChild(spaceFiller);
-    row.appendChild(space);
+    // spaceFiller.append(document.createTextNode('X'));
+    space.append(spaceFiller);
+    row.append(space);
   }
-  gameboard.appendChild(row);
+  gameboard.append(row);
 }
+
+// Board lines
 
 const middleColumn = document.getElementsByClassName('col-1');
 const middleRow = document.getElementsByClassName('row-1');
@@ -46,19 +48,37 @@ for (let i = 0; i < middleRow.length; i++) {
   middleRow[i].style.cssText = 'border-top: 3px solid black; border-bottom: 3px solid black;' + currentStyle;
 }
 
+// Reset button
 
+const resetButtonContainer = document.createElement('div');
+const resetButton = document.createElement('button');
 
-
-
-
-//// Views //// DOM manipulation and event listeners ////////
-
-
-
-//// Controllers //// Request and response handling ////////
-
+resetButtonContainer.setAttribute('style', 'margin-top: 20px;');
+resetButton.append('Reset game');
+resetButtonContainer.append(resetButton);
+app.append(resetButtonContainer);
 
 
 //// Models //// Data storage ////////
 
 
+
+//// Controllers //// Request and response handling ////////
+
+const placePiece = (event) => {
+  // console.log(event.target.childNodes[0].childNodes.length);
+  const {id, childNodes} = event.target.childNodes[0];
+  if (id && childNodes.length === 0) {
+    console.log(id);
+    const targetElement = document.getElementById(id);
+    targetElement.append('X');
+  }
+};
+
+//// Views //// DOM manipulation and event listeners ////////
+
+const spaces = document.getElementsByClassName('space');
+
+for (let i = 0; i < spaces.length; i++) {
+  spaces[i].onclick = placePiece;
+}
