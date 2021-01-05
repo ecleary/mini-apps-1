@@ -87,14 +87,27 @@ const resetPiece = () => {
 // Serve game progress
 
 let gameInProgress = true;
+let piecesPlaced = 0;
 
 const checkGameProgress = () => {
   return gameInProgress;
 };
 
+const endGame = () => {
+  gameInProgress = false;
+};
+
+const countMove = () => {
+  piecesPlaced++;
+  return piecesPlaced;
+};
+
 const resetGameProgress = () => {
   gameInProgress = true;
+  piecesPlaced = 0;
 };
+
+// Manage winner
 
 const checkForRowWin = () => {
   for (let i = 0; i < 3; i++) {
@@ -181,6 +194,11 @@ const placePiece = (event) => {
     if (id && childNodes.length === 0) {
       const {currentPiece, nextPiece} = getNextPiece();
       appendPieceToSpace(id, currentPiece);
+      let movesPlayed = countMove();
+      if (movesPlayed === 9) {
+        endGame();
+        announceDraw();
+      }
     }
   }
 };
@@ -262,9 +280,14 @@ const clearBoard = () => {
 
 resetButton.onclick = clearBoard;
 
-// Announce winner
+// Announce end of game
 
 const announceWinner = (winner) => {
   nextMoveIndicator.removeChild(nextMoveIndicator.lastChild);
   nextMoveIndicator.append(`${winner} wins!`);
+};
+
+const announceDraw = () => {
+  nextMoveIndicator.removeChild(nextMoveIndicator.lastChild);
+  nextMoveIndicator.append(`It's a draw!`);
 };
