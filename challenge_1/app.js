@@ -113,12 +113,28 @@ const checkForRowWin = () => {
   }
   return false;
 };
+
 const checkForColWin = () => {
+  for (let i = 0; i < 3; i++) {
+    let stack = '';
+    for (let j = 0; j < 3; j++) {
+      let currentPiece = document.getElementById(`r${j}-c${i}`).innerText;
+      if (typeof currentPiece === 'string') {
+        stack += currentPiece;
+      }
+    }
+    let win = checkStatus(stack);
+    if (win) {
+      return win;
+    }
+  }
   return false;
 };
+
 const checkForMajDiagWin = () => {
   return false;
 };
+
 const checkForMinDiagWin = () => {
   return false;
 };
