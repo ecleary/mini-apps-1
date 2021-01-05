@@ -15,8 +15,6 @@ body.append(app);
 
 // Game board
 
-gameboard.setAttribute('cellspacing', '0');
-
 for (let i = 0; i < 3; i++) {
   let row = document.createElement('tr');
   for (let j = 0; j < 3; j++) {
@@ -35,6 +33,8 @@ for (let i = 0; i < 3; i++) {
 
 // Board lines
 
+gameboard.setAttribute('cellspacing', '0');
+
 const middleColumn = document.getElementsByClassName('col-1');
 const middleRow = document.getElementsByClassName('row-1');
 
@@ -50,12 +50,19 @@ for (let i = 0; i < middleRow.length; i++) {
   middleRow[i].style.cssText = 'border-top: 5px solid black; border-bottom: 5px solid black;' + currentStyle;
 }
 
+// Next move indicator
+
+const nextMoveIndicator = document.createElement('div');
+nextMoveIndicator.style.cssText = 'margin-top: 30px; margin-bottom: 30px;';
+nextMoveIndicator.append('Next move: X');
+app.insertBefore(nextMoveIndicator, gameboard);
+
 // Reset button
 
 const resetButtonContainer = document.createElement('div');
 const resetButton = document.createElement('button');
 
-resetButtonContainer.setAttribute('style', 'margin-top: 20px;');
+resetButtonContainer.setAttribute('style', 'margin-top: 30px;');
 resetButton.append('Reset game');
 resetButtonContainer.append(resetButton);
 app.append(resetButtonContainer);
@@ -63,14 +70,19 @@ app.append(resetButtonContainer);
 
 //// Models //// Data storage ////////
 
-// Serve piece
+// Serve next piece and current piece
 
 let nextPiece = 'X';
 
 const getNextPiece = () => {
   const currentPiece = nextPiece;
   nextPiece = nextPiece === 'X' ? 'O' : 'X';
-  return currentPiece;
+  return {currentPiece, nextPiece};
+};
+
+const resetPiece = () => {
+  nextPiece = 'X';
+  return nextPiece;
 };
 
 // Serve game progress
@@ -84,9 +96,17 @@ const getNextPiece = () => {
 const placePiece = (event) => {
   const {id, childNodes} = event.target.childNodes[0];
   if (id && childNodes.length === 0) {
-    const piece = getNextPiece();
-    appendPieceToSpace(id, piece);
+    const {currentPiece, nextPiece} = getNextPiece();
+    appendPieceToSpace(id, currentPiece);
+    updateNextMove(nextPiece);
   }
+};
+
+// Reset next piece
+
+const resetNextPiece = () => {
+  const piece = resetPiece();
+  updateNextMove(piece);
 };
 
 // Check for winner
@@ -112,6 +132,13 @@ const appendPieceToSpace = (id, piece) => {
   targetElement.append(piece);
 };
 
+// Update next move
+
+const updateNextMove = (piece) => {
+  nextMoveIndicator.removeChild(nextMoveIndicator.lastChild);
+  nextMoveIndicator.append(`Next move: ${piece}`);
+};
+
 // Reset board
 
 const clearBoard = () => {
@@ -123,6 +150,7 @@ const clearBoard = () => {
       }
     }
   }
+  resetNextPiece();
 };
 
 resetButton.onclick = clearBoard;
