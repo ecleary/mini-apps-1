@@ -87,35 +87,101 @@ const resetPiece = () => {
 
 // Serve game progress
 
+let gameInProgress = true;
 
+const checkGameProgress = () => {
+  return gameInProgress;
+};
+
+const resetGameProgress = () => {
+  gameInProgress = true;
+};
+
+const checkForRowWin = () => {
+  for (let i = 0; i < 3; i++) {
+    let stack = '';
+    for (let j = 0; j < 3; j++) {
+      let currentPiece = document.getElementById(`r${i}-c${j}`).innerText;
+      if (typeof currentPiece === 'string') {
+        stack += currentPiece;
+      }
+    }
+    let win = checkStatus(stack);
+    if (win) {
+      return win;
+    }
+  }
+  return false;
+};
+const checkForColWin = () => {
+  return false;
+};
+const checkForMajDiagWin = () => {
+  return false;
+};
+const checkForMinDiagWin = () => {
+  return false;
+};
+
+const checkStatus = (stack) => {
+  if (stack === 'XXX') {
+    gameInProgress = false;
+    return 'X';
+  } else if (stack === 'OOO') {
+    gameInProgress = false;
+    return 'O';
+  }
+  return false;
+};
 
 //// Controllers //// Request and response handling ////////
 
 // Place piece
 
 const placePiece = (event) => {
-  const {id, childNodes} = event.target.childNodes[0];
-  if (id && childNodes.length === 0) {
-    const {currentPiece, nextPiece} = getNextPiece();
-    appendPieceToSpace(id, currentPiece);
-    updateNextMove(nextPiece);
+  if (checkGameProgress()) {
+    const {id, childNodes} = event.target.childNodes[0];
+    if (id && childNodes.length === 0) {
+      const {currentPiece, nextPiece} = getNextPiece();
+      appendPieceToSpace(id, currentPiece);
+    }
   }
 };
 
-// Reset next piece
+// Reset game
 
 const resetNextPiece = () => {
   const piece = resetPiece();
   updateNextMove(piece);
 };
 
+const resetGameStatus = () => {
+  resetGameProgress();
+};
+
 // Check for winner
 
-
+const checkForWin = (callback) => {
+  const checks = [checkForRowWin, checkForColWin, checkForMajDiagWin, checkForMinDiagWin];
+  let runCallback = true;
+  for (let i = 0; i < checks.length; i++) {
+    let check = checks[i]();
+    if (check) {
+      declareWinner(check);
+      runCallback = false;
+      break;
+    }
+  }
+  if (runCallback) {
+    callback();
+  }
+};
 
 // Declare winner
 
-
+const declareWinner = (winner) => {
+  announceWinner(winner);
+};
 
 //// Views //// DOM manipulation and event listeners ////////
 
@@ -130,6 +196,9 @@ for (let i = 0; i < spaces.length; i++) {
 const appendPieceToSpace = (id, piece) => {
   const targetElement = document.getElementById(id);
   targetElement.append(piece);
+  checkForWin(() => {
+    updateNextMove(nextPiece);
+  });
 };
 
 // Update next move
@@ -151,6 +220,14 @@ const clearBoard = () => {
     }
   }
   resetNextPiece();
+  resetGameStatus();
 };
 
 resetButton.onclick = clearBoard;
+
+// Announce winner
+
+const announceWinner = (winner) => {
+  nextMoveIndicator.removeChild(nextMoveIndicator.lastChild);
+  nextMoveIndicator.append(`${winner} wins!`);
+};
