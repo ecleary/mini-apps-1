@@ -67,7 +67,6 @@ resetButton.append('Reset game');
 resetButtonContainer.append(resetButton);
 app.append(resetButtonContainer);
 
-
 //// Models //// Data storage ////////
 
 // Serve next piece and current piece
@@ -132,10 +131,32 @@ const checkForColWin = () => {
 };
 
 const checkForMajDiagWin = () => {
+  let stack = '';
+  for (let i = 0; i < 3; i++) {
+    let currentPiece = document.getElementById(`r${i}-c${i}`).innerText;
+    if (typeof currentPiece === 'string') {
+      stack += currentPiece;
+    }
+  }
+  let win = checkStatus(stack);
+  if (win) {
+    return win;
+  }
   return false;
 };
 
 const checkForMinDiagWin = () => {
+  let stack = '';
+  for (let i = 0; i < 3; i++) {
+    let currentPiece = document.getElementById(`r${2 - i}-c${i}`).innerText;
+    if (typeof currentPiece === 'string') {
+      stack += currentPiece;
+    }
+  }
+  let win = checkStatus(stack);
+  if (win) {
+    return win;
+  }
   return false;
 };
 
