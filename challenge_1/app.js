@@ -21,7 +21,7 @@ for (let i = 0; i < 3; i++) {
     let space = document.createElement('td');
     space.className = `space row-${i} col-${j}`;
     // space.setAttribute('alt', `r${i}-c${j}`);
-    space.style.cssText = 'width: 70px; height: 70px; text-align: center;';
+    space.style.cssText = 'width: 80px; height: 80px; text-align: center; cursor: pointer;';
     let spaceFiller = document.createElement('h1');
     spaceFiller.id = `r${i}-c${j}`;
     // spaceFiller.append(document.createTextNode('X'));
@@ -66,12 +66,9 @@ app.append(resetButtonContainer);
 //// Controllers //// Request and response handling ////////
 
 const placePiece = (event) => {
-  // console.log(event.target.childNodes[0].childNodes.length);
   const {id, childNodes} = event.target.childNodes[0];
   if (id && childNodes.length === 0) {
-    console.log(id);
-    const targetElement = document.getElementById(id);
-    targetElement.append('X');
+    appendPieceToSpace(id, 'X');
   }
 };
 
@@ -82,3 +79,8 @@ const spaces = document.getElementsByClassName('space');
 for (let i = 0; i < spaces.length; i++) {
   spaces[i].onclick = placePiece;
 }
+
+const appendPieceToSpace = (id, piece) => {
+  const targetElement = document.getElementById(id);
+  targetElement.append(piece);
+};
