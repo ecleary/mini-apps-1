@@ -1,17 +1,19 @@
 //// Init //// View initialization on first load ////////
 
+const init = {};
+
 // Document
 
-const body = document.body;
-const app = document.createElement('div');
-const title = document.createElement('h1');
-const helloWorld = document.createTextNode(`Let’s Play Tic-Tac-Toe`);
-const gameboard = document.createElement('table');
+init.body = document.body;
+init.app = document.createElement('div');
+init.title = document.createElement('h1');
+init.titleText = document.createTextNode(`Let’s Play Tic-Tac-Toe`);
+init.gameboard = document.createElement('table');
 
-title.append(helloWorld);
-app.append(title);
-app.append(gameboard);
-body.append(app);
+init.title.append(init.titleText);
+init.app.append(init.title);
+init.app.append(init.gameboard);
+init.body.append(init.app);
 
 // Game board
 
@@ -26,88 +28,91 @@ for (let i = 0; i < 3; i++) {
     space.append(position);
     row.append(space);
   }
-  gameboard.append(row);
+  init.gameboard.append(row);
 }
 
 // Board lines
 
-gameboard.setAttribute('cellspacing', '0');
+init.gameboard.setAttribute('cellspacing', '0');
 
-const middleColumn = document.getElementsByClassName('col-1');
-const middleRow = document.getElementsByClassName('row-1');
+init.middleColumn = document.getElementsByClassName('col-1');
+init.middleRow = document.getElementsByClassName('row-1');
 
-for (let i = 0; i < middleColumn.length; i++) {
-  let currentStyle = middleColumn[i].getAttribute('style');
+for (let i = 0; i < init.middleColumn.length; i++) {
+  let currentStyle = init.middleColumn[i].getAttribute('style');
   currentStyle = currentStyle ? ' ' + currentStyle : '';
-  middleColumn[i].style.cssText = 'border-left: 5px solid black; border-right: 5px solid black;' + currentStyle;
+  init.middleColumn[i].style.cssText = 'border-left: 5px solid black; border-right: 5px solid black;' + currentStyle;
 }
 
-for (let i = 0; i < middleRow.length; i++) {
-  let currentStyle = middleRow[i].getAttribute('style');
+for (let i = 0; i < init.middleRow.length; i++) {
+  let currentStyle = init.middleRow[i].getAttribute('style');
   currentStyle = currentStyle ? ' ' + currentStyle : '';
-  middleRow[i].style.cssText = 'border-top: 5px solid black; border-bottom: 5px solid black;' + currentStyle;
+  init.middleRow[i].style.cssText = 'border-top: 5px solid black; border-bottom: 5px solid black;' + currentStyle;
 }
 
 // Next move indicator
 
-const nextMoveIndicator = document.createElement('div');
-nextMoveIndicator.style.cssText = 'margin-top: 30px; margin-bottom: 30px;';
-nextMoveIndicator.append('Next move: X');
-app.insertBefore(nextMoveIndicator, gameboard);
+init.nextMoveIndicator = document.createElement('div');
+init.nextMoveIndicator.style.cssText = 'margin-top: 30px; margin-bottom: 30px;';
+init.nextMoveIndicator.append('Next move: X');
+init.app.insertBefore(init.nextMoveIndicator, init.gameboard);
 
 // Reset button
 
-const resetButtonContainer = document.createElement('div');
-const resetButton = document.createElement('button');
+init.resetButtonContainer = document.createElement('div');
+init.resetButton = document.createElement('button');
 
-resetButtonContainer.setAttribute('style', 'margin-top: 30px;');
-resetButton.append('Reset game');
-resetButtonContainer.append(resetButton);
-app.append(resetButtonContainer);
+init.resetButtonContainer.setAttribute('style', 'margin-top: 30px;');
+init.resetButton.append('Reset game');
+init.resetButtonContainer.append(init.resetButton);
+init.app.append(init.resetButtonContainer);
 
 //// Models //// Data storage ////////
 
+const models = {};
+
 // Serve next piece and current piece
 
-let nextPiece = 'X';
+models.nextPiece = 'X';
 
-const getNextPiece = () => {
-  const currentPiece = nextPiece;
-  nextPiece = nextPiece === 'X' ? 'O' : 'X';
+models.getNextPiece = () => {
+  const currentPiece = models.nextPiece;
+  models.nextPiece = models.nextPiece === 'X' ? 'O' : 'X';
+  const nextPiece = models.nextPiece;
   return {currentPiece, nextPiece};
 };
 
-const resetPiece = () => {
-  nextPiece = 'X';
-  return nextPiece;
+models.resetPiece = () => {
+  models.nextPiece = 'X';
+  return models.nextPiece;
 };
 
 // Serve game progress
 
-let gameInProgress = true;
-let piecesPlaced = 0;
+models.gameInProgress = true;
+models.piecesPlaced = 0;
 
-const checkGameProgress = () => {
-  return gameInProgress;
+models.checkGameProgress = () => {
+  return models.gameInProgress;
 };
 
-const endGame = () => {
-  gameInProgress = false;
+models.endGame = () => {
+  models.gameInProgress = false;
 };
 
-const countMove = () => {
-  piecesPlaced++;
-  return piecesPlaced;
+models.countMove = () => {
+  models.piecesPlaced++;
+  return models.piecesPlaced;
 };
 
-const resetGameProgress = () => {
-  gameInProgress = true;
-  piecesPlaced = 0;
+models.resetGameProgress = () => {
+  models.gameInProgress = true;
+  models.piecesPlaced = 0;
 };
 
 // Manage winner
 
-const checkForRowWin = () => {
+models.checkForRowWin = () => {
   for (let i = 0; i < 3; i++) {
     let stack = '';
     for (let j = 0; j < 3; j++) {
@@ -116,7 +121,7 @@ const checkForRowWin = () => {
         stack += currentPiece;
       }
     }
-    let win = checkStatus(stack);
+    let win = models.checkStatus(stack);
     if (win) {
       return win;
     }
@@ -124,7 +129,7 @@ const checkForRowWin = () => {
   return false;
 };
 
-const checkForColWin = () => {
+models.checkForColWin = () => {
   for (let i = 0; i < 3; i++) {
     let stack = '';
     for (let j = 0; j < 3; j++) {
@@ -133,7 +138,7 @@ const checkForColWin = () => {
         stack += currentPiece;
       }
     }
-    let win = checkStatus(stack);
+    let win = models.checkStatus(stack);
     if (win) {
       return win;
     }
@@ -141,7 +146,7 @@ const checkForColWin = () => {
   return false;
 };
 
-const checkForMajDiagWin = () => {
+models.checkForMajDiagWin = () => {
   let stack = '';
   for (let i = 0; i < 3; i++) {
     let currentPiece = document.getElementById(`r${i}-c${i}`).innerText;
@@ -149,14 +154,14 @@ const checkForMajDiagWin = () => {
       stack += currentPiece;
     }
   }
-  let win = checkStatus(stack);
+  let win = models.checkStatus(stack);
   if (win) {
     return win;
   }
   return false;
 };
 
-const checkForMinDiagWin = () => {
+models.checkForMinDiagWin = () => {
   let stack = '';
   for (let i = 0; i < 3; i++) {
     let currentPiece = document.getElementById(`r${2 - i}-c${i}`).innerText;
@@ -164,19 +169,19 @@ const checkForMinDiagWin = () => {
       stack += currentPiece;
     }
   }
-  let win = checkStatus(stack);
+  let win = models.checkStatus(stack);
   if (win) {
     return win;
   }
   return false;
 };
 
-const checkStatus = (stack) => {
+models.checkStatus = (stack) => {
   if (stack === 'XXX') {
-    gameInProgress = false;
+    models.gameInProgress = false;
     return 'X';
   } else if (stack === 'OOO') {
-    gameInProgress = false;
+    models.gameInProgress = false;
     return 'O';
   }
   return false;
@@ -184,89 +189,93 @@ const checkStatus = (stack) => {
 
 //// Controllers //// Request and response handling ////////
 
+const controllers = {};
+
 // Place piece
 
-const placePiece = (event) => {
-  if (checkGameProgress()) {
+controllers.placePiece = (event) => {
+  if (models.checkGameProgress()) {
     const {id, childNodes} = event.target.childNodes[0];
     if (id && childNodes.length === 0) {
-      const {currentPiece, nextPiece} = getNextPiece();
-      appendPieceToSpace(id, currentPiece);
-      // let movesPlayed = countMove();
-      // if (movesPlayed === 9) {
-      //   endGame();
-      //   announceDraw();
-      // }
+      const {currentPiece, nextPiece} = models.getNextPiece();
+      views.appendPieceToSpace(id, currentPiece);
     }
   }
 };
 
 // Reset game
 
-const resetNextPiece = () => {
-  const piece = resetPiece();
-  updateNextMove(piece);
+controllers.resetNextPiece = () => {
+  const piece = models.resetPiece();
+  views.updateNextMove(piece);
 };
 
-const resetGameStatus = () => {
-  resetGameProgress();
+controllers.resetGameProgress = () => {
+  models.resetGameProgress();
 };
 
 // Check for winner
 
-const checkForWin = () => {
-  const checks = [checkForRowWin, checkForColWin, checkForMajDiagWin, checkForMinDiagWin];
+controllers.checkForWin = () => {
+  const checks = [
+    models.checkForRowWin,
+    models.checkForColWin,
+    models.checkForMajDiagWin,
+    models.checkForMinDiagWin
+  ];
   let proceedToNextMove = true;
   for (let i = 0; i < checks.length; i++) {
     let check = checks[i]();
     if (check) {
-      declareWinner(check);
+      controllers.declareWinner(check);
       proceedToNextMove = false;
       break;
     }
   }
   if (proceedToNextMove) {
-    updateNextMove(nextPiece);
-    let movesPlayed = countMove();
+    views.updateNextMove(models.nextPiece);
+    let movesPlayed = models.countMove();
     if (movesPlayed === 9) {
-      endGame();
-      announceDraw();
+      models.endGame();
+      views.announceDraw();
     }
   }
 };
 
 // Declare winner
 
-const declareWinner = (winner) => {
-  announceWinner(winner);
+controllers.declareWinner = (winner) => {
+  views.announceWinner(winner);
 };
 
 //// Views //// DOM manipulation and event listeners ////////
 
+const views = {};
+
 // Listen for click and append piece
 
-const spaces = document.getElementsByClassName('space');
+views.spaces = document.getElementsByClassName('space');
 
-for (let i = 0; i < spaces.length; i++) {
-  spaces[i].onclick = placePiece;
+for (let i = 0; i < views.spaces.length; i++) {
+  views.spaces[i].onclick = controllers.placePiece;
 }
 
-const appendPieceToSpace = (id, piece) => {
+views.appendPieceToSpace = (id, piece) => {
   const targetElement = document.getElementById(id);
   targetElement.append(piece);
-  checkForWin();
+  controllers.checkForWin();
 };
 
 // Update next move
 
-const updateNextMove = (piece) => {
-  nextMoveIndicator.removeChild(nextMoveIndicator.lastChild);
-  nextMoveIndicator.append(`Next move: ${piece}`);
+views.updateNextMove = (piece) => {
+  init.nextMoveIndicator.removeChild(init.nextMoveIndicator.lastChild);
+  init.nextMoveIndicator.append(`Next move: ${piece}`);
 };
 
 // Reset board
 
-const clearBoard = () => {
+views.clearBoard = () => {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       const position = document.getElementById(`r${i}-c${j}`);
@@ -275,20 +284,20 @@ const clearBoard = () => {
       }
     }
   }
-  resetNextPiece();
-  resetGameStatus();
+  controllers.resetNextPiece();
+  controllers.resetGameProgress();
 };
 
-resetButton.onclick = clearBoard;
+init.resetButton.onclick = views.clearBoard;
 
 // Announce end of game
 
-const announceWinner = (winner) => {
-  nextMoveIndicator.removeChild(nextMoveIndicator.lastChild);
-  nextMoveIndicator.append(`${winner} wins!`);
+views.announceWinner = (winner) => {
+  init.nextMoveIndicator.removeChild(init.nextMoveIndicator.lastChild);
+  init.nextMoveIndicator.append(`${winner} wins!`);
 };
 
-const announceDraw = () => {
-  nextMoveIndicator.removeChild(nextMoveIndicator.lastChild);
-  nextMoveIndicator.append(`It's a draw!`);
+views.announceDraw = () => {
+  init.nextMoveIndicator.removeChild(init.nextMoveIndicator.lastChild);
+  init.nextMoveIndicator.append(`It's a draw!`);
 };
