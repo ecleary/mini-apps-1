@@ -1,0 +1,24 @@
+{
+  "name": "multistep-checkout-experience",
+  "description": "modeling the checkout experience",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ecleary/hrsf132-mini-apps-1.git"
+  },
+  "scripts": {
+    "start": "nodemon server",
+    "watch": "npx babel ./client --watch --out-dir ./public"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.10",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-react": "^7.12.10",
+    "nodemon": "^2.0.7"
+  }
+}
