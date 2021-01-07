@@ -254,17 +254,64 @@ class ShippingForm extends React.Component {
 class PaymentForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      cardNumber: '',
+      expirationDate: '',
+      CVV: '',
+      billingZip: ''
+    };
+    this.handleInput = this.handleInput.bind(this);
+    this.handleSubmitPaymentInfo = this.handleSubmitPaymentInfo.bind(this);
+  };
+
+  handleInput(event) {
+    const {name, value} = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleSubmitPaymentInfo(event) {
+    event.preventDefault();
+    const {onEnterPaymentInfo} = this.props;
+    onEnterPaymentInfo();
   };
 
   render() {
     const {displayPage, onEnterPaymentInfo} = this.props;
+    const {cardNumber, expirationDate, CVV, billingZip} = this.state;
     let paymentForm;
     if (displayPage === 'PaymentForm') {
       paymentForm = (
         <div>
-          <h2>Enter Payment Information</h2>
-          <button onClick={onEnterPaymentInfo}>Next</button>
+          <h2>Enter Shipping Information</h2>
+          <form onSubmit={this.handleSubmitPaymentInfo}>
+            <label>
+              Credit card number
+              <br />
+              <input type="text" name="cardNumber" value={cardNumber} onChange={this.handleInput} placeholder="1234 5678 9012 3456" />
+            </label>
+            <br />
+            <label>
+              Expiration date
+              <br />
+              <input type="text" name="expirationDate" value={expirationDate} onChange={this.handleInput} placeholder="01 25" />
+            </label>
+            <br />
+            <label>
+              CVV
+              <br />
+              <input type="text" name="CVV" value={CVV} onChange={this.handleInput} placeholder="123" />
+            </label>
+            <br />
+            <label>
+              Billing ZIP code
+              <br />
+              <input type="text" name="billingZip" value={billingZip} onChange={this.handleInput} placeholder="Zone Improvement Plan" />
+            </label>
+            <br />
+            <input type="submit" value="Next" />
+          </form>
         </div>
       );
     } else {
