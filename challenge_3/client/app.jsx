@@ -7,8 +7,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       displayPage: 'Home',
-      userId: ''
+      userId: '',
+      checkoutData: []
     };
+    this.getData = this.getData.bind(this);
     this.postData = this.postData.bind(this);
     this.patchData = this.patchData.bind(this);
     this.updateDisplayPage = this.updateDisplayPage.bind(this);
@@ -23,6 +25,19 @@ class App extends React.Component {
   componentDidMount() {
     this.setState({
       displayPage: 'Home'
+    });
+  };
+
+  getData(id, callback) {
+    $.ajax({
+      url: `http://localhost:3000/data/${id}`,
+      method: 'GET',
+      success: (data) => {
+        callback(null, data);
+      },
+      error: (err) => {
+        callback(err);
+      }
     });
   };
 

@@ -1,5 +1,16 @@
 const model = require('../model/model.js');
 
+module.exports.getData = (req, res, next) => {
+  const {id} = req.params;
+  model.getData(id, (err, data) => {
+    if (err) {
+      res.status(404).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  });
+};
+
 module.exports.postData = (req, res, next) => {
   const {type} = req.query;
   const data = req.body;

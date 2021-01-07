@@ -9,6 +9,7 @@ app.use('/', express.static(path.join(__dirname, '../public/')));
 
 app.use('/data', express.urlencoded({extended: false}));
 
+app.get('/data/:id', controller.getData);
 app.post('/data', controller.postData);
 app.patch('/data/:id', controller.patchData);
 
