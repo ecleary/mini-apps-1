@@ -53,9 +53,23 @@ class App extends React.Component {
 
   render() {
     const {displayPage} = this.state;
+
+    let title;
+    if (displayPage === 'Home') {
+      title = <h1>🛒 Multistep Checkout Experience</h1>;
+    } else if (displayPage === 'AccountForm') {
+      title = <h1>Multistep 💻 Checkout Experience</h1>;
+    } else if (displayPage === 'ShippingForm') {
+      title = <h1>Multistep Checkout 🏠 Experience</h1>;
+    } else if (displayPage === 'PaymentForm') {
+      title = <h1>Multistep Checkout Experience 💰</h1>;
+    } else if (displayPage === 'Confirmation') {
+      title = <h1>🛒 Multistep 💻 Checkout 🏠 Experience 💰</h1>;
+    }
+
     return (
       <div>
-        <h1>Multistep 🛒 Checkout 🏠 Experience 💰</h1>
+        {title}
         <Home displayPage={displayPage} onCheckout={this.handleCheckout} />
         <AccountForm displayPage={displayPage} onCreateAccount={this.handleCreateAccount} />
         <ShippingForm displayPage={displayPage} onEnterShippingInfo={this.handleEnterShippingInfo} />
@@ -89,17 +103,58 @@ const Home = (props) => {
 class AccountForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      name: '',
+      email: '',
+      password: ''
+    };
+    this.handleInput = this.handleInput.bind(this);
+    this.handleCreateAccount = this.handleCreateAccount.bind(this);
+  };
+
+  handleInput(event) {
+    const {name, value} = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleCreateAccount(event) {
+    event.preventDefault();
+    const {onCreateAccount} = this.props;
+    onCreateAccount();
   };
 
   render() {
     const {displayPage, onCreateAccount} = this.props;
+    const {name, email, password} = this.state;
     let accountForm;
     if (displayPage === 'AccountForm') {
       accountForm = (
         <div>
           <h2>Create Account</h2>
-          <button onClick={onCreateAccount}>Next</button>
+          {/* <button onClick={onCreateAccount}>Next</button> */}
+          <form onSubmit={this.handleCreateAccount}>
+            <label>
+              Name
+              <br />
+              <input type="text" name="name" value={name} onChange={this.handleInput} placeholder="鈴木太郎" />
+            </label>
+            <br />
+            <label>
+              Email
+              <br />
+              <input type="text" name="email" value={email} onChange={this.handleInput} placeholder="example@email.com" />
+            </label>
+            <br />
+            <label>
+              Password
+              <br />
+              <input type="text" name="password" value={password} onChange={this.handleInput} placeholder="Secret" />
+            </label>
+            <br />
+            <input type="submit" value="Next" />
+          </form>
         </div>
       );
     } else {
