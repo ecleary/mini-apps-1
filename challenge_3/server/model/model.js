@@ -1,11 +1,11 @@
 const {connection, Checkout, mysql} = require('../../database');
 
-module.exports.postData = (data, callback) => {
-  Checkout.create({user: data}, (err, res) => {
+module.exports.postData = (type, data, callback) => {
+  Checkout.create({[type]: data}, (err, res) => {
     if (err) {
       callback(err);
     } else {
-      callback(res);
+      callback(null, res);
     }
   });
 };
@@ -15,7 +15,7 @@ module.exports.patchData = (id, type, data, callback) => {
     if (err) {
       callback(err);
     } else {
-      callback(res);
+      callback(null, res);
     }
   });
 };

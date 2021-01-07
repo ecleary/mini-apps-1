@@ -6,8 +6,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayPage: 'Home'
+      displayPage: 'Home',
+      userId: ''
     };
+    this.postData = this.postData.bind(this);
+    this.updateDisplayPage = this.updateDisplayPage.bind(this);
+    this.updateUserId = this.updateUserId.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
     this.handleCreateAccount = this.handleCreateAccount.bind(this);
     this.handleEnterShippingInfo = this.handleEnterShippingInfo.bind(this);
@@ -15,11 +19,37 @@ class App extends React.Component {
     this.handlePurchase = this.handlePurchase.bind(this);
   };
 
-  // componentDidMount() {
-  //   this.setState({
-  //     displayPage: 'Home'
-  //   });
-  // };
+  componentDidMount() {
+    this.setState({
+      displayPage: 'Home'
+    });
+  };
+
+  postData(type, data, callback) {
+    $.ajax({
+      url: `http://localhost:3000/data?type=${type}`,
+      method: 'POST',
+      data: data,
+      success: (data) => {
+        callback(null, data);
+      },
+      error: (err) => {
+        callback(err);
+      }
+    });
+  };
+
+  updateDisplayPage(displayPage) {
+    this.setState({
+      displayPage: displayPage
+    });
+  };
+
+  updateUserId(userId) {
+    this.setState({
+      userId: userId
+    });
+  };
 
   handleCheckout() {
     this.setState({
@@ -27,9 +57,15 @@ class App extends React.Component {
     });
   };
 
-  handleCreateAccount() {
-    this.setState({
-      displayPage: 'ShippingForm'
+  handleCreateAccount(data) {
+      this.postData('user', data, (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const {_id} = data;
+        this.updateDisplayPage('ShippingForm');
+        this.updateUserId(_id);
+      }
     });
   };
 
@@ -122,7 +158,8 @@ class AccountForm extends React.Component {
   handleCreateAccount(event) {
     event.preventDefault();
     const {onCreateAccount} = this.props;
-    onCreateAccount();
+    const data = this.state;
+    onCreateAccount(data);
   };
 
   render() {
@@ -133,7 +170,6 @@ class AccountForm extends React.Component {
       accountForm = (
         <div>
           <h2>Create Account</h2>
-          {/* <button onClick={onCreateAccount}>Next</button> */}
           <form onSubmit={this.handleCreateAccount}>
             <label>
               Name
@@ -304,7 +340,7 @@ class PaymentForm extends React.Component {
             <label>
               Expiration date
               <br />
-              <input type="text" name="expirationDate" value={expirationDate} onChange={this.handleInput} placeholder="01 25" />
+              <input type="text" name="expirationDate" value={expirationDate} onChange={this.handleInput} placeholder="01 23" />
             </label>
             <br />
             <br />

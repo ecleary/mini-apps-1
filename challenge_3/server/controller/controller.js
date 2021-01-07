@@ -1,8 +1,9 @@
 const model = require('../model/model.js');
 
 module.exports.postData = (req, res, next) => {
+  const {type} = req.query;
   const data = req.body;
-  model.postData(data, (err, data) => {
+  model.postData(type, data, (err, data) => {
     if (err) {
       res.status(404).send(err);
     } else {
