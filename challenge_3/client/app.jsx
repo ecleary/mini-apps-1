@@ -138,8 +138,9 @@ class AccountForm extends React.Component {
             <label>
               Name
               <br />
-              <input type="text" name="name" value={name} onChange={this.handleInput} placeholder="鈴木太郎" />
+              <input type="text" name="name" value={name} onChange={this.handleInput} placeholder="First Last" />
             </label>
+            <br />
             <br />
             <label>
               Email
@@ -147,11 +148,13 @@ class AccountForm extends React.Component {
               <input type="text" name="email" value={email} onChange={this.handleInput} placeholder="example@email.com" />
             </label>
             <br />
+            <br />
             <label>
               Password
               <br />
               <input type="password" name="password" value={password} onChange={this.handleInput} placeholder="Secret" />
             </label>
+            <br />
             <br />
             <input type="submit" value="Next" />
           </form>
@@ -211,11 +214,13 @@ class ShippingForm extends React.Component {
               <input type="text" name="line1" value={line1} onChange={this.handleInput} placeholder="123 Named St" />
             </label>
             <br />
+            <br />
             <label>
               Address line 2
               <br />
               <input type="text" name="line2" value={line2} onChange={this.handleInput} placeholder="Apt 123" />
             </label>
+            <br />
             <br />
             <label>
               City
@@ -223,17 +228,20 @@ class ShippingForm extends React.Component {
               <input type="text" name="city" value={city} onChange={this.handleInput} placeholder="Town" />
             </label>
             <br />
+            <br />
             <label>
               State
               <br />
               <input type="text" name="state" value={state} onChange={this.handleInput} placeholder="ST" />
             </label>
             <br />
+            <br />
             <label>
               ZIP
               <br />
               <input type="text" name="zip" value={zip} onChange={this.handleInput} placeholder="Zone Improvement Plan" />
             </label>
+            <br />
             <br />
             <input type="submit" value="Next" />
           </form>
@@ -292,11 +300,13 @@ class PaymentForm extends React.Component {
               <input type="text" name="cardNumber" value={cardNumber} onChange={this.handleInput} placeholder="1234 5678 9012 3456" />
             </label>
             <br />
+            <br />
             <label>
               Expiration date
               <br />
               <input type="text" name="expirationDate" value={expirationDate} onChange={this.handleInput} placeholder="01 25" />
             </label>
+            <br />
             <br />
             <label>
               CVV
@@ -304,11 +314,13 @@ class PaymentForm extends React.Component {
               <input type="text" name="CVV" value={CVV} onChange={this.handleInput} placeholder="123" />
             </label>
             <br />
+            <br />
             <label>
               Billing ZIP code
               <br />
               <input type="text" name="billingZip" value={billingZip} onChange={this.handleInput} placeholder="Zone Improvement Plan" />
             </label>
+            <br />
             <br />
             <input type="submit" value="Next" />
           </form>
