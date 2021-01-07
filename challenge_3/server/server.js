@@ -1,11 +1,15 @@
 const express = require('express');
 const path = require('path');
-const database = require('../database');
+const controller = require('./controller/controller.js');
 
 const app = express();
 const port = '3000';
 
 app.use('/', express.static(path.join(__dirname, '../public/')));
+
+app.use('/data', express.urlencoded({extended: false}));
+
+app.post('/data', controller.postData);
 
 app.listen(port, (err) => {
   if (err) {
