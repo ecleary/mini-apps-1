@@ -10,6 +10,7 @@ class App extends React.Component {
       userId: ''
     };
     this.postData = this.postData.bind(this);
+    this.patchData = this.patchData.bind(this);
     this.updateDisplayPage = this.updateDisplayPage.bind(this);
     this.updateUserId = this.updateUserId.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
@@ -29,6 +30,20 @@ class App extends React.Component {
     $.ajax({
       url: `http://localhost:3000/data?type=${type}`,
       method: 'POST',
+      data: data,
+      success: (data) => {
+        callback(null, data);
+      },
+      error: (err) => {
+        callback(err);
+      }
+    });
+  };
+
+  patchData(id, type, data, callback) {
+    $.ajax({
+      url: `http://localhost:3000/data/${id}?type=${type}`,
+      method: 'PATCH',
       data: data,
       success: (data) => {
         callback(null, data);
@@ -69,9 +84,14 @@ class App extends React.Component {
     });
   };
 
-  handleEnterShippingInfo() {
-    this.setState({
-      displayPage: 'PaymentForm'
+  handleEnterShippingInfo(data) {
+    const {userId} = this.state;
+    this.patchData(userId, 'address', data, (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        this.updateDisplayPage('PaymentForm');
+      }
     });
   };
 
@@ -232,7 +252,8 @@ class ShippingForm extends React.Component {
   handleSubmitShippingInfo(event) {
     event.preventDefault();
     const {onEnterShippingInfo} = this.props;
-    onEnterShippingInfo();
+    const data = this.state;
+    onEnterShippingInfo(data);
   };
 
   render() {
