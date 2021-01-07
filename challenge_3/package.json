@@ -7,7 +7,7 @@
     "url": "https://github.com/ecleary/hrsf132-mini-apps-1.git"
   },
   "scripts": {
-    "start": "nodemon server",
+    "start": "nodemon ./server/server.js",
     "watch": "npx babel ./client --watch --out-dir ./public"
   },
   "dependencies": {
