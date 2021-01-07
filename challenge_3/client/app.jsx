@@ -95,9 +95,14 @@ class App extends React.Component {
     });
   };
 
-  handleEnterPaymentInfo() {
-    this.setState({
-      displayPage: 'Confirmation'
+  handleEnterPaymentInfo(data) {
+    const {userId} = this.state;
+    this.patchData(userId, 'wallet', data, (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        this.updateDisplayPage('Confirmation');
+      }
     });
   };
 
@@ -339,7 +344,8 @@ class PaymentForm extends React.Component {
   handleSubmitPaymentInfo(event) {
     event.preventDefault();
     const {onEnterPaymentInfo} = this.props;
-    onEnterPaymentInfo();
+    const data = this.state;
+    onEnterPaymentInfo(data);
   };
 
   render() {
