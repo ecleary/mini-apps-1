@@ -88,7 +88,7 @@ class App extends React.Component {
     });
   };
 
-  handleCreateAccount(data) {
+  handleCreateAccount(data, callback) {
       this.postData('user', data, (err, data) => {
       if (err) {
         console.error(err);
@@ -96,22 +96,24 @@ class App extends React.Component {
         const {_id} = data;
         this.updateDisplayPage('ShippingForm');
         this.updateUserId(_id);
+        callback();
       }
     });
   };
 
-  handleEnterShippingInfo(data) {
+  handleEnterShippingInfo(data, callback) {
     const {userId} = this.state;
     this.patchData(userId, 'address', data, (err, data) => {
       if (err) {
         console.error(err);
       } else {
         this.updateDisplayPage('PaymentForm');
+        callback();
       }
     });
   };
 
-  handleEnterPaymentInfo(data) {
+  handleEnterPaymentInfo(data, callback) {
     const {userId} = this.state;
     this.patchData(userId, 'wallet', data, (err, data) => {
       if (err) {
@@ -123,6 +125,7 @@ class App extends React.Component {
           } else {
             this.updateCheckoutData(data);
             this.updateDisplayPage('Confirmation');
+            callback();
           }
         });
       }
@@ -195,6 +198,7 @@ class AccountForm extends React.Component {
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleCreateAccount = this.handleCreateAccount.bind(this);
+    this.clearInput = this.clearInput.bind(this);
   };
 
   handleInput(event) {
@@ -208,7 +212,15 @@ class AccountForm extends React.Component {
     event.preventDefault();
     const {onCreateAccount} = this.props;
     const data = this.state;
-    onCreateAccount(data);
+    onCreateAccount(data, this.clearInput);
+  };
+
+  clearInput() {
+    this.setState({
+      name: '',
+      email: '',
+      password: ''
+    });
   };
 
   render() {
@@ -269,6 +281,7 @@ class ShippingForm extends React.Component {
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmitShippingInfo = this.handleSubmitShippingInfo.bind(this);
+    this.clearInput = this.clearInput.bind(this);
   };
 
   handleInput(event) {
@@ -282,7 +295,17 @@ class ShippingForm extends React.Component {
     event.preventDefault();
     const {onEnterShippingInfo} = this.props;
     const data = this.state;
-    onEnterShippingInfo(data);
+    onEnterShippingInfo(data, this.clearInput);
+  };
+
+  clearInput() {
+    this.setState({
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      zip: ''
+    });
   };
 
   render() {
@@ -356,6 +379,7 @@ class PaymentForm extends React.Component {
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmitPaymentInfo = this.handleSubmitPaymentInfo.bind(this);
+    this.clearInput = this.clearInput.bind(this);
   };
 
   handleInput(event) {
@@ -369,7 +393,16 @@ class PaymentForm extends React.Component {
     event.preventDefault();
     const {onEnterPaymentInfo} = this.props;
     const data = this.state;
-    onEnterPaymentInfo(data);
+    onEnterPaymentInfo(data, this.clearInput);
+  };
+
+  clearInput() {
+    this.setState({
+      cardNumber: '',
+      expirationDate: '',
+      CVV: '',
+      billingZip: ''
+    });
   };
 
   render() {
