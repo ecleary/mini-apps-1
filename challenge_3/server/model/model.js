@@ -9,3 +9,13 @@ module.exports.postData = (data, callback) => {
     }
   });
 };
+
+module.exports.patchData = (id, type, data, callback) => {
+  Checkout.updateOne({_id: id}, {[type]: data}, (err, res) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(res);
+    }
+  });
+};
