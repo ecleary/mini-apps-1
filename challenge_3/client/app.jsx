@@ -150,7 +150,7 @@ class AccountForm extends React.Component {
             <label>
               Password
               <br />
-              <input type="text" name="password" value={password} onChange={this.handleInput} placeholder="Secret" />
+              <input type="password" name="password" value={password} onChange={this.handleInput} placeholder="Secret" />
             </label>
             <br />
             <input type="submit" value="Next" />
@@ -172,17 +172,71 @@ class AccountForm extends React.Component {
 class ShippingForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      zip: ''
+    };
+    this.handleInput = this.handleInput.bind(this);
+    this.handleSubmitShippingInfo = this.handleSubmitShippingInfo.bind(this);
+  };
+
+  handleInput(event) {
+    const {name, value} = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleSubmitShippingInfo(event) {
+    event.preventDefault();
+    const {onEnterShippingInfo} = this.props;
+    onEnterShippingInfo();
   };
 
   render() {
     const {displayPage, onEnterShippingInfo} = this.props;
+    const {line1, line2, city, state, zip} = this.state;
     let shippingForm;
     if (displayPage === 'ShippingForm') {
       shippingForm = (
         <div>
           <h2>Enter Shipping Information</h2>
-          <button onClick={onEnterShippingInfo}>Next</button>
+          <form onSubmit={this.handleSubmitShippingInfo}>
+            <label>
+              Address line 1
+              <br />
+              <input type="text" name="line1" value={line1} onChange={this.handleInput} placeholder="123 Named St" />
+            </label>
+            <br />
+            <label>
+              Address line 2
+              <br />
+              <input type="text" name="line2" value={line2} onChange={this.handleInput} placeholder="Apt 123" />
+            </label>
+            <br />
+            <label>
+              City
+              <br />
+              <input type="text" name="city" value={city} onChange={this.handleInput} placeholder="Town" />
+            </label>
+            <br />
+            <label>
+              State
+              <br />
+              <input type="text" name="state" value={state} onChange={this.handleInput} placeholder="ST" />
+            </label>
+            <br />
+            <label>
+              ZIP
+              <br />
+              <input type="text" name="zip" value={zip} onChange={this.handleInput} placeholder="Zone Improvement Plan" />
+            </label>
+            <br />
+            <input type="submit" value="Next" />
+          </form>
         </div>
       );
     } else {
