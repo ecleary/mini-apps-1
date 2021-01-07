@@ -15,6 +15,7 @@ class App extends React.Component {
     this.patchData = this.patchData.bind(this);
     this.updateDisplayPage = this.updateDisplayPage.bind(this);
     this.updateUserId = this.updateUserId.bind(this);
+    this.updateCheckoutData = this.updateCheckoutData.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
     this.handleCreateAccount = this.handleCreateAccount.bind(this);
     this.handleEnterShippingInfo = this.handleEnterShippingInfo.bind(this);
@@ -70,15 +71,15 @@ class App extends React.Component {
   };
 
   updateDisplayPage(displayPage) {
-    this.setState({
-      displayPage: displayPage
-    });
+    this.setState({displayPage});
   };
 
   updateUserId(userId) {
-    this.setState({
-      userId: userId
-    });
+    this.setState({userId});
+  };
+
+  updateCheckoutData(checkoutData) {
+    this.setState({checkoutData});
   };
 
   handleCheckout() {
@@ -116,20 +117,28 @@ class App extends React.Component {
       if (err) {
         console.error(err);
       } else {
-        this.updateDisplayPage('Confirmation');
+        this.getData(userId, (err, data) => {
+          if (err) {
+            console.error(err);
+          } else {
+            this.updateCheckoutData(data);
+            this.updateDisplayPage('Confirmation');
+          }
+        });
       }
     });
   };
 
   handlePurchase() {
     this.setState({
-      displayPage: 'Home'
+      displayPage: 'Home',
+      userId: '',
+      checkoutData: []
     });
   };
 
   render() {
-    const {displayPage} = this.state;
-
+    const {displayPage, checkoutData} = this.state;
     let title;
     if (displayPage === 'Home') {
       title = <h1>🛒 Multistep Checkout Experience</h1>;
@@ -150,7 +159,7 @@ class App extends React.Component {
         <AccountForm displayPage={displayPage} onCreateAccount={this.handleCreateAccount} />
         <ShippingForm displayPage={displayPage} onEnterShippingInfo={this.handleEnterShippingInfo} />
         <PaymentForm displayPage={displayPage} onEnterPaymentInfo={this.handleEnterPaymentInfo} />
-        <Confirmation displayPage={displayPage} onPurchase={this.handlePurchase} />
+        <Confirmation displayPage={displayPage} checkoutData={checkoutData} onPurchase={this.handlePurchase} />
       </div>
     );
   };
@@ -314,7 +323,7 @@ class ShippingForm extends React.Component {
             <br />
             <br />
             <label>
-              ZIP
+              ZIP code
               <br />
               <input type="text" name="zip" value={zip} onChange={this.handleInput} placeholder="Zone Improvement Plan" />
             </label>
@@ -417,18 +426,85 @@ class PaymentForm extends React.Component {
 }
 
 const Confirmation = (props) => {
-  const {displayPage, onPurchase} = props;
+  const {displayPage, checkoutData, onPurchase} = props;
   let confirmation;
   if (displayPage === 'Confirmation') {
+    const {user, address, wallet} = checkoutData;
+    const {name, email} = user;
+    const {line1, line2, city, state, zip} = address;
+    const {cardNumber, expirationDate, CVV, billingZip} = wallet;
     confirmation = (
       <div>
         <h2>Confirmation</h2>
+        <table>
+          <tbody>
+            <tr>
+              <td colSpan="2">Account Information</td>
+            </tr>
+            <tr>
+              <td>Name:</td>
+              <td>{name}</td>
+            </tr>
+            <tr>
+              <td>Email:</td>
+              <td>{email}</td>
+            </tr>
+            <tr>
+              <td>Password:</td>
+              <td>••••</td>
+            </tr>
+            <tr>
+              <td colSpan="2">Shipping Information</td>
+            </tr>
+            <tr>
+              <td>Address line 1:</td>
+              <td>{line1}</td>
+            </tr>
+            <tr>
+            <td>Address line 2:</td>
+              <td>{line2}</td>
+            </tr>
+            <tr>
+              <td>City:</td>
+              <td>{city}</td>
+            </tr>
+            <tr>
+              <td>State:</td>
+              <td>{state}</td>
+            </tr>
+            <tr>
+              <td>ZIP code:</td>
+              <td>{zip}</td>
+            </tr>
+            <tr>
+              <td colSpan="2">Payment Information</td>
+            </tr>
+            <tr>
+              <td>Credit card number:</td>
+              <td>{cardNumber}</td>
+            </tr>
+            <tr>
+              <td>Expiration date:</td>
+              <td>{expirationDate}</td>
+            </tr>
+            <tr>
+              <td>CVV:</td>
+              <td>{CVV}</td>
+            </tr>
+            <tr>
+              <td>Billing ZIP code:</td>
+              <td>{billingZip}</td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
         <button onClick={onPurchase}>Purchase</button>
       </div>
     );
   } else {
     confirmation = null;
   }
+
   return (
     <div>
       {confirmation}
