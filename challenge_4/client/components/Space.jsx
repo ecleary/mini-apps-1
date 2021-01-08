@@ -9,17 +9,16 @@ class Space extends Component {
   };
 
   handlePlacePiece() {
-    const {rowNum, colNum, onPlacePiece} = this.props;
-    onPlacePiece(rowNum, colNum);
+    const {row, col, onPlacePiece} = this.props;
+    onPlacePiece(row, col);
   };
 
   render() {
-    const {rowNum, colNum, placedPiece} = this.props;
-    let spaceColor = placedPiece === ''
-      ? 'rgba(100, 100, 100, 0.1)'
-      : placedPiece;
+    const {row, col, placedPiece} = this.props;
+    const cursor = this.props.legend ? 'default' : 'pointer';
+    const spaceColor = placedPiece === '' ? 'rgba(100, 100, 100, 0.1)' : placedPiece;
     const spaceStyle = {
-      cursor: 'pointer',
+      cursor: cursor,
       fontSize: '60px',
       color: spaceColor
     };

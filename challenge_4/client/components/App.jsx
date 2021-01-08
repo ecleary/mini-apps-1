@@ -1,6 +1,7 @@
 import React from 'react';
 const Component = React.Component;
 import Row from './Row.jsx';
+import Space from './Space.jsx';
 
 
 class App extends Component {
@@ -8,7 +9,8 @@ class App extends Component {
     super(props);
     this.state = {
       gameBoard: [],
-      nextPiece: ''
+      nextPiece: '',
+      gameInProgress: true
     };
     this.determineFirstPiece = this.determineFirstPiece.bind(this);
     this.toggleNextPiece = this.toggleNextPiece.bind(this);
@@ -43,11 +45,11 @@ class App extends Component {
     return toggledNextPiece;
   };
 
-  handlePlacePiece(rowNum, colNum) {
+  handlePlacePiece(row, col) {
     const {gameBoard, nextPiece} = this.state;
-    if (this.checkSpaceAvailability(rowNum, colNum) && this.checkGravity(rowNum, colNum)) {
+    if (this.checkSpaceAvailability(row, col) && this.checkGravity(row, col)) {
       const updatedGameBoard = gameBoard.slice();
-      updatedGameBoard[rowNum][colNum] = nextPiece;
+      updatedGameBoard[row][col] = nextPiece;
       this.setState({
         gameBoard: updatedGameBoard,
         nextPiece: this.toggleNextPiece()
@@ -55,33 +57,46 @@ class App extends Component {
     }
   };
 
-  checkSpaceAvailability(rowNum, colNum) {
+  checkSpaceAvailability(row, col) {
     const {gameBoard} = this.state;
-    return gameBoard[rowNum][colNum] === '';
+    return gameBoard[row][col] === '';
   };
 
-  checkGravity(rowNum, colNum) {
+  checkGravity(row, col) {
     const {gameBoard} = this.state;
-    if (rowNum === 5) {
+    if (row === 5) {
       return true;
-    } else if (gameBoard[rowNum + 1][colNum] !== '') {
+    } else if (gameBoard[row + 1][col] !== '') {
       return true;
     }
     return false;
   };
 
   render() {
-    const {gameBoard} = this.state;
+    const {gameBoard, nextPiece, gameInProgress} = this.state;
     const board = [];
     for (let i = 0; i < gameBoard.length; i++) {
-      let row = <Row key={i} gameRow={gameBoard[i]} rowNum={i} onPlacePiece={this.handlePlacePiece} />;
+      let row = <Row key={i} gameRow={gameBoard[i]} row={i} onPlacePiece={this.handlePlacePiece} />;
       board.push(row);
+    }
+    let message;
+    if (gameInProgress) {
+      message = (
+        <div>
+          <span style={{display: 'flex', alignItems:'center'}}>
+            Next move: <Space placedPiece={nextPiece} legend={true} onPlacePiece={() => {}} />
+          </span>
+        </div>
+      );
+    } else {
+      message = null;
     }
 
     return (
       <div>
-      <h1>Connect Four</h1>
-      {board}
+        <h1>Connect Four</h1>
+        {board}
+        {message}
       </div>
     );
   };
