@@ -9,9 +9,9 @@
   1. Build your client app inside the *client* folder
   2. Separate your React components into their own files
 3. Bundle with Webpack
-  1. Configure `webpack-dev` to load components into your client
+  1. Configure `webpack-dev` \[*sic*] to load components into your client
   2. Set Webpack to watch for changes
-  3. Set Webpack's entry point to `app.js`
+  3. Set Webpack's entry point to `app.js` \[*sic*]
 4. Use Express to serve your app and handle API requests
   1. Build your Express app inside `server.js`
 5. Use Nodemon to run server
